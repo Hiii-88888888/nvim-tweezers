@@ -1,11 +1,11 @@
 local M = {}
 
-local convert = require("scissors.vscode-format.convert-object")
-local rw = require("scissors.vscode-format.read-write")
-local u = require("scissors.utils")
+local convert = require("tweezers.vscode-format.convert-object")
+local rw = require("tweezers.vscode-format.read-write")
+local u = require("tweezers.utils")
 --------------------------------------------------------------------------------
 
----@class (exact) Scissors.extMarkInfo
+---@class (exact) Tweezers.extMarkInfo
 ---@field bufnr number
 ---@field ns number
 ---@field id number
@@ -26,7 +26,7 @@ end
 ---@param newPrefixCount number
 ---@param bufnr number
 local function updatePrefixLabel(newPrefixCount, bufnr)
-	local prefixLabelNs = vim.api.nvim_create_namespace("nvim-scissors-prefix-label")
+	local prefixLabelNs = vim.api.nvim_create_namespace("nvim-tweezers-prefix-label")
 	vim.api.nvim_buf_clear_namespace(bufnr, prefixLabelNs, 0, -1)
 	for i = 1, newPrefixCount do
 		local label = newPrefixCount == 1 and "Prefix" or "Prefix #" .. i
@@ -41,10 +41,10 @@ end
 ---@param bufnr number
 ---@param winnr number
 ---@param mode "new"|"update"
----@param snip Scissors.SnippetObj
----@param prefixBodySep Scissors.extMarkInfo
+---@param snip Tweezers.SnippetObj
+---@param prefixBodySep Tweezers.extMarkInfo
 local function setupPopupKeymaps(bufnr, winnr, mode, snip, prefixBodySep)
-	local maps = require("scissors.config").config.editSnippetPopup.keymaps
+	local maps = require("tweezers.config").config.editSnippetPopup.keymaps
 	local function keymap(modes, lhs, rhs)
 		vim.keymap.set(modes, lhs, rhs, { buffer = bufnr, nowait = true, silent = true })
 	end
@@ -140,9 +140,9 @@ local function setupPopupKeymaps(bufnr, winnr, mode, snip, prefixBodySep)
 	keymap("n", maps.goBackToSearch, function()
 		closePopup()
 		if mode == "new" then
-			require("scissors").addNewSnippet()
+			require("tweezers").addNewSnippet()
 		elseif mode == "update" then
-			require("scissors").editSnippet()
+			require("tweezers").editSnippet()
 		end
 	end)
 
@@ -165,7 +165,7 @@ local function setupPopupKeymaps(bufnr, winnr, mode, snip, prefixBodySep)
 			"",
 			"All mappings apply to normal mode (if not noted otherwise).",
 		}
-		u.notify(table.concat(info, "\n"), "info", { id = "scissors-help", timeout = 10000 })
+		u.notify(table.concat(info, "\n"), "info", { id = "tweezers-help", timeout = 10000 })
 	end)
 
 	-----------------------------------------------------------------------------
@@ -213,8 +213,8 @@ end
 ---@param snip Scissors.SnippetObj
 ---@param mode "new"|"update"
 function M.editInPopup(snip, mode)
-	local conf = require("scissors.config").config.editSnippetPopup
-	local ns = vim.api.nvim_create_namespace("nvim-scissors-editing")
+	local conf = require("tweezers.config").config.editSnippetPopup
+	local ns = vim.api.nvim_create_namespace("nvim-tweezers-editing")
 
 	-- CREATE BUFFER
 	local bufnr = vim.api.nvim_create_buf(false, true)
@@ -233,10 +233,10 @@ function M.editInPopup(snip, mode)
 	local ft = snip.filetype
 	if ft == "zsh" or ft == "sh" then ft = "bash" end -- substitute missing `sh` and `zsh` parsers
 	pcall(vim.treesitter.start, bufnr, ft) -- errors when no parser available
-	vim.bo[bufnr].filetype = require("scissors.config").scissorsFiletype
+	vim.bo[bufnr].filetype = require("tweezers.config").tweezersFiletype
 
 	-- WINDOW TITLE
-	local icon = require("scissors.config").config.icons.scissors
+	local icon = require("tweezers.config").config.icons.tweezers
 	local nameOfSnippetFile = vim.fs.basename(snip.fullPath)
 	local winTitle = {
 		{ " " .. vim.trim(icon .. " " .. bufName) .. " ", "FloatTitle" },
@@ -245,7 +245,7 @@ function M.editInPopup(snip, mode)
 
 	-- FOOTER – KEYMAP HINTS
 	local hlgroup = { key = "Comment", desc = "NonText" }
-	local maps = require("scissors.config").config.editSnippetPopup.keymaps
+	local maps = require("tweezers.config").config.editSnippetPopup.keymaps
 	local footer = {
 		{ " normal mode: " },
 		{ maps.showHelp:gsub("[<>]", ""), hlgroup.key },
@@ -285,7 +285,7 @@ function M.editInPopup(snip, mode)
 	-- reduce scrolloff based on user-set window size
 	vim.wo[winnr].sidescrolloff = math.floor(vim.wo.sidescrolloff * conf.width)
 	vim.wo[winnr].scrolloff = math.floor(vim.wo.scrolloff * conf.height)
-	require("scissors.backdrop").new(bufnr, popupZindex)
+	require("tweezers.backdrop").new(bufnr, popupZindex)
 
 	-- move cursor
 	if mode == "new" then
@@ -326,7 +326,7 @@ function M.editInPopup(snip, mode)
 
 	-- Adjusts the popup size when the Neovim window is resized
 	vim.api.nvim_create_autocmd("VimResized", {
-		group = vim.api.nvim_create_augroup("scissors-resized", { clear = true }),
+		group = vim.api.nvim_create_augroup("tweezers-resized", { clear = true }),
 		callback = function()
 			if not vim.api.nvim_win_is_valid(winnr) then return end
 
