@@ -12,7 +12,7 @@ body:
           required: true
         - label:
             I have read [the docs, and in particular the
-            FAQ](https://github.com/chrisgrieser/nvim-scissors#table-of-contents).
+            FAQ](https://github.com/Hiii-88888888/nvim-tweezers#table-of-contents).
           required: true
         - label:
             The problem is related to creating or editing snippets. (Expanding and using snippet is
