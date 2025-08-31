@@ -1,5 +1,5 @@
 local M = {}
-local u = require("scissors.utils")
+local u = require("tweezers.utils")
 --------------------------------------------------------------------------------
 
 local fallbackBorder = "rounded"
@@ -65,7 +65,7 @@ local defaultConfig = {
 		blend = 50, -- between 0-100
 	},
 	icons = {
-		scissors = "󰩫",
+		tweezers = "󰩫",-- not really tweezers, named this way for aesthetic purposes
 	},
 }
 
@@ -81,7 +81,7 @@ function M.setupPlugin(userConfig)
 	---@diagnostic disable: undefined-field
 	if M.config.telescope then
 		local msg =
-			"The nvim-scissors config `telescope` is deprecated. Use `snippetSelection.telescope` instead."
+			"The nvim-tweezers config `telescope` is deprecated. Use `snippetSelection.telescope` instead."
 		u.notify(msg, "warn")
 		M.config.snippetSelection.telescope = M.config.telescope
 	end
@@ -105,7 +105,7 @@ function M.setupPlugin(userConfig)
 end
 
 -- filetype used for the popup window of this plugin
-M.scissorsFiletype = "scissors-snippet"
+M.tweezersFiletype = "tweezers-snippet"
 
 --------------------------------------------------------------------------------
 return M
