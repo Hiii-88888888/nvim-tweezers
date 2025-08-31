@@ -8,8 +8,8 @@ function M.notify(msg, level, opts)
 	if not level then level = "info" end
 	opts = opts or {}
 
-	opts.title = "scissors"
-	opts.icon = require("scissors.config").config.icons.scissors
+	opts.title = "tweezers"
+	opts.icon = require("tweezers.config").config.icons.tweezers
 
 	vim.notify(msg, vim.log.levels[level:upper()], opts)
 end
@@ -51,7 +51,7 @@ function M.tokenHighlight(bufnr)
 		-- escaped dollar
 		vim.fn.matchadd("@string.escape", [[\\\$]])
 
-		-- do not highlights dollars signs after a backslash (negative lookbehind)
+		-- do not highlight dollar signs after a backslash (negative lookbehind)
 		-- https://neovim.io/doc/user/pattern.html#%2F%5C%40%3C%21
 		local unescapedDollar = [[\(\\\)\@<!\$]]
 		local hlgroup = "DiagnosticVirtualTextInfo"
