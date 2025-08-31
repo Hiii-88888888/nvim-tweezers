@@ -1,8 +1,8 @@
 local M = {}
 
-local convert = require("scissors.vscode-format.convert-object")
-local u = require("scissors.utils")
-local vb = require("scissors.vscode-format.validate-bootstrap")
+local convert = require("tweezers.vscode-format.convert-object")
+local u = require("tweezers.utils")
+local vb = require("tweezers.vscode-format.validate-bootstrap")
 --------------------------------------------------------------------------------
 
 ---@param lines string[]
@@ -28,16 +28,16 @@ end
 --------------------------------------------------------------------------------
 
 function M.editSnippet()
-	local snippetDir = require("scissors.config").config.snippetDir
+	local snippetDir = require("tweezers.config").config.snippetDir
 
 	-- GUARD
 	if not vb.validate(snippetDir) then return end
-	local packageJsonExist = u.fileExists(snippetDir .. "/package.json")
-	if not packageJsonExist then
+	local packageLuaExist = u.fileExists(snippetDir .. "/package.lua")
+	if not packageLuaExist then
 		u.notify(
-			"Your snippet directory is missing a `package.json`.\n"
+			"Your snippet directory is missing a `package.lua`.\n"
 				.. "The file can be bootstrapped by adding a new snippet via:\n"
-				.. ":ScissorsAddNewSnippet",
+				.. ":TweezersAddNewSnippet",
 			"warn"
 		)
 		return
@@ -62,11 +62,11 @@ function M.editSnippet()
 	end
 
 	-- SELECT
-	require("scissors.2-picker.picker-choice").selectSnippet(allSnippets)
+	require("tweezers.2-picker.picker-choice").selectSnippet(allSnippets)
 end
 
 function M.addNewSnippet(exCmdArgs)
-	local snippetDir = require("scissors.config").config.snippetDir
+	local snippetDir = require("tweezers.config").config.snippetDir
 
 	-- GUARD & bootstrap
 	if not vb.validate(snippetDir) then return end
@@ -106,14 +106,14 @@ function M.addNewSnippet(exCmdArgs)
 		function(file) return { path = file, ft = "plaintext" } end,
 		convert.getSnippetfilePathsForFt("all")
 	)
-	---@type Scissors.snipFile[]
+	---@type Tweezers.snipFile[]
 	local allSnipFiles = vim.list_extend(snipFilesForFt, snipFilesForAll)
 
 	-- GUARD file listed in `package.json` does not exist
 	for _, snipFile in ipairs(allSnipFiles) do
 		if not u.fileExists(snipFile.path) then
 			local relPath = snipFile.path:sub(#snippetDir + 1)
-			local msg = ("%q is listed as a file in the `package.json` "):format(relPath)
+			local msg = ("%q is listed as a file in the `package.lua` "):format(relPath)
 				.. "but it does not exist. Aborting."
 			u.notify(msg, "error")
 			return
@@ -129,9 +129,9 @@ function M.addNewSnippet(exCmdArgs)
 
 	-- SELECT
 	if #allSnipFiles == 1 then
-		require("scissors.3-edit-popup").createNewSnipAndEdit(allSnipFiles[1], bodyPrefill)
+		require("tweezers.3-edit-popup").createNewSnipAndEdit(allSnipFiles[1], bodyPrefill)
 	else
-		require("scissors.2-picker.vim-ui-select").addSnippet(allSnipFiles, bodyPrefill)
+		require("tweezers.2-picker.vim-ui-select").addSnippet(allSnipFiles, bodyPrefill)
 	end
 end
 
