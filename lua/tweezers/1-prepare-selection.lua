@@ -32,10 +32,10 @@ function M.editSnippet()
 
 	-- GUARD
 	if not vb.validate(snippetDir) then return end
-	local packageLuaExist = u.fileExists(snippetDir .. "/package.lua")
-	if not packageLuaExist then
+	local packageJsonExist = u.fileExists(snippetDir .. "/package.json")
+	if not packageJsonExist then
 		u.notify(
-			"Your snippet directory is missing a `package.lua`.\n"
+			"Your snippet directory is missing a `package.json`.\n"
 				.. "The file can be bootstrapped by adding a new snippet via:\n"
 				.. ":TweezersAddNewSnippet",
 			"warn"
@@ -45,7 +45,7 @@ function M.editSnippet()
 
 	-- GET ALL SNIPPETS
 	local bufferFt = vim.bo.filetype
-	local allSnippets = {} ---@type Scissors.SnippetObj[]
+	local allSnippets = {} ---@type Tweezers.SnippetObj[]
 	for _, absPath in pairs(convert.getSnippetfilePathsForFt(bufferFt)) do
 		local filetypeSnippets = convert.readVscodeSnippetFile(absPath, bufferFt)
 		vim.list_extend(allSnippets, filetypeSnippets)
@@ -113,7 +113,7 @@ function M.addNewSnippet(exCmdArgs)
 	for _, snipFile in ipairs(allSnipFiles) do
 		if not u.fileExists(snipFile.path) then
 			local relPath = snipFile.path:sub(#snippetDir + 1)
-			local msg = ("%q is listed as a file in the `package.lua` "):format(relPath)
+			local msg = ("%q is listed as a file in the `package.json` "):format(relPath)
 				.. "but it does not exist. Aborting."
 			u.notify(msg, "error")
 			return
