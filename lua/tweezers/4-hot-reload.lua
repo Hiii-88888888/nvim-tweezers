@@ -1,5 +1,5 @@
 local M = {}
-local u = require("scissors.utils")
+local u = require("tweezers.utils")
 --------------------------------------------------------------------------------
 
 local hasNotifiedOnRestartRequirement = false
