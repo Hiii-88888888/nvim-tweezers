@@ -9,14 +9,14 @@ local actions = require("telescope.actions")
 local finders = require("telescope.finders")
 local previewers = require("telescope.previewers")
 
-local u = require("scissors.utils")
+local u = require("tweezers.utils")
 --------------------------------------------------------------------------------
 
----@param snippets Scissors.SnippetObj[] entries
+---@param snippets Tweezers.SnippetObj[] entries
 ---@param prompt string
 function M.selectSnippet(snippets, prompt)
-	require("scissors.backdrop").setup("TelescopeResults")
-	local conf = require("scissors.config").config.snippetSelection.telescope
+	require("tweezers.backdrop").setup("TelescopeResults")
+	local conf = require("tweezers.config").config.snippetSelection.telescope
 
 	pickers
 		.new(conf.opts, {
@@ -34,7 +34,7 @@ function M.selectSnippet(snippets, prompt)
 						value = snip,
 						display = function(entry)
 							local _snip = entry.value
-							local filename = vim.fs.basename(snip.fullPath):gsub("%.json$", "")
+							local filename = vim.fs.basename(snip.fullPath):gsub("%.lua$", "")
 							local out = u.snipDisplayName(_snip) .. "\t" .. filename
 							local highlights = {
 								{ { #out - #filename, #out }, "TelescopeResultsComment" },
@@ -66,8 +66,8 @@ function M.selectSnippet(snippets, prompt)
 			attach_mappings = function(promptBufnr, _)
 				actions.select_default:replace(function()
 					actions.close(promptBufnr)
-					local snip = actionState.get_selected_entry().value ---@type Scissors.SnippetObj
-					require("scissors.3-edit-popup").editInPopup(snip, "update")
+					local snip = actionState.get_selected_entry().value ---@type Tweezers.SnippetObj
+					require("tweezers.3-edit-popup").editInPopup(snip, "update")
 				end)
 				return true -- `true` = keeps default mappings from user
 			end,
