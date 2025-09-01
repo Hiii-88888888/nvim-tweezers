@@ -1,6 +1,6 @@
 local M = {}
 
-local u = require("scissors.utils")
+local u = require("tweezers.utils")
 --------------------------------------------------------------------------------
 
 ---@param path string
@@ -32,11 +32,11 @@ function M.writeFile(filepath, text)
 end
 
 ---@param filepath string
----@param jsonObj Scissors.VSCodeSnippetDict|Scissors.packageJson
+---@param jsonObj Tweezers.VSCodeSnippetDict|Tweezers.packageJson
 ---@param fileIsNew? boolean
 ---@return boolean success
 function M.writeAndFormatSnippetFile(filepath, jsonObj, fileIsNew)
-	local jsonFormatter = require("scissors.config").config.jsonFormatter
+	local jsonFormatter = require("tweezers.config").config.jsonFormatter
 
 	local ok, jsonStr = pcall(vim.json.encode, jsonObj)
 	assert(ok and jsonStr, "Could not encode JSON.")
@@ -79,11 +79,11 @@ function M.writeAndFormatSnippetFile(filepath, jsonObj, fileIsNew)
 	return true
 end
 
----@param snip Scissors.SnippetObj
+---@param snip Tweezers.SnippetObj
 function M.deleteSnippet(snip)
 	local key = assert(snip.originalKey)
 	local snippetsInFile = M.readAndParseJson(snip.fullPath)
-	---@cast snippetsInFile Scissors.VSCodeSnippetDict
+	---@cast snippetsInFile Tweezers.VSCodeSnippetDict
 	snippetsInFile[key] = nil -- = delete
 
 	local success = M.writeAndFormatSnippetFile(snip.fullPath, snippetsInFile)
