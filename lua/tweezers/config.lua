@@ -13,7 +13,7 @@ end
 
 --------------------------------------------------------------------------------
 
----@class Scissors.Config
+---@class Tweezers.Config
 local defaultConfig = {
 	snippetDir = vim.fn.stdpath("config") .. "/snippets",
 	editSnippetPopup = {
@@ -73,7 +73,7 @@ local defaultConfig = {
 
 M.config = defaultConfig -- in case user does not call `setup`
 
----@param userConfig? Scissors.Config
+---@param userConfig? Tweezers.Config
 function M.setupPlugin(userConfig)
 	M.config = vim.tbl_deep_extend("force", defaultConfig, userConfig or {})
 
