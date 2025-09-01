@@ -13,7 +13,7 @@ local u = require("tweezers.utils")
 ---INFO the extmark representing the horizontal divider between prefix and body
 ---also acts as method to determine the number of prefixes. If the user has
 ---inserted/deleted a line, this is considered a change in number of prefixes
----@param prefixBodySep Scissors.extMarkInfo
+---@param prefixBodySep Tweezers.extMarkInfo
 ---@return number newCount
 ---@nodiscard
 local function getPrefixCount(prefixBodySep)
@@ -59,7 +59,7 @@ local function setupPopupKeymaps(bufnr, winnr, mode, snip, prefixBodySep)
 		-- VALIDATE
 		local prefixEmpty = vim.trim(vim.iter(editedLines):take(newPrefixCount):join("\n")) == ""
 		if prefixEmpty then
-			u.notify("Prefix cannot be empty.", "warn")
+			u.notify("Trig cannot be empty.", "warn")
 			return
 		end
 		local bodyEmpty = vim.trim(vim.iter(editedLines):skip(newPrefixCount):join("\n")) == ""
@@ -84,9 +84,9 @@ local function setupPopupKeymaps(bufnr, winnr, mode, snip, prefixBodySep)
 
 	keymap("n", maps.saveChanges, confirmChanges)
 	-- so people in the habit of saving via `:w` do not get an error
-	vim.cmd.cnoreabbrev("<buffer> w ScissorsSave")
-	vim.cmd.cnoreabbrev("<buffer> write ScissorsSave")
-	vim.api.nvim_buf_create_user_command(bufnr, "ScissorsSave", confirmChanges, {})
+	vim.cmd.cnoreabbrev("<buffer> w TweezersSave")
+	vim.cmd.cnoreabbrev("<buffer> write TweezersSave")
+	vim.api.nvim_buf_create_user_command(bufnr, "TweezersSave", confirmChanges, {})
 
 	keymap("n", maps.deleteSnippet, function()
 		if mode == "new" then
@@ -196,12 +196,12 @@ end
 
 --------------------------------------------------------------------------------
 
----@param snipFile Scissors.snipFile
+---@param snipFile Tweezers.snipFile
 ---@param bodyPrefill string[]
 function M.createNewSnipAndEdit(snipFile, bodyPrefill)
-	---@type Scissors.SnippetObj
+	---@type Tweezers.SnippetObj
 	local snip = {
-		prefix = { "" },
+		trig = { "" },
 		body = bodyPrefill,
 		fullPath = snipFile.path,
 		filetype = snipFile.ft,
@@ -210,7 +210,7 @@ function M.createNewSnipAndEdit(snipFile, bodyPrefill)
 	M.editInPopup(snip, "new")
 end
 
----@param snip Scissors.SnippetObj
+---@param snip Tweezers.SnippetObj
 ---@param mode "new"|"update"
 function M.editInPopup(snip, mode)
 	local conf = require("tweezers.config").config.editSnippetPopup
