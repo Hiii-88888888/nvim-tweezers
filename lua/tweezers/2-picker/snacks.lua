@@ -2,16 +2,16 @@
 --------------------------------------------------------------------------------
 local M = {}
 
-local u = require("scissors.utils")
+local u = require("tweezers.utils")
 --------------------------------------------------------------------------------
 
----@param snippets Scissors.SnippetObj[]
----@return Scissors.SnacksObj[]
+---@param snippets Tweezers.SnippetObj[]
+---@return Tweezers.SnacksObj[]
 local function createSnacksItems(snippets)
-	---@type Scissors.SnacksObj[]
+	---@type Tweezers.SnacksObj[]
 	local items = {}
 	for i, snip in ipairs(snippets) do
-		local filename = vim.fs.basename(snip.fullPath):gsub("%.json$", "")
+		local filename = vim.fs.basename(snip.fullPath):gsub("%.lua$", "")
 		local displayName = u.snipDisplayName(snip)
 		local name = displayName .. "\t" .. filename
 
@@ -28,7 +28,7 @@ local function createSnacksItems(snippets)
 	return items
 end
 
----@param snippets Scissors.SnippetObj[] entries
+---@param snippets Tweezers.SnippetObj[] entries
 ---@param prompt string
 function M.selectSnippet(snippets, prompt)
 	return require("snacks").picker {
@@ -44,7 +44,7 @@ function M.selectSnippet(snippets, prompt)
 		end,
 
 		preview = function(ctx)
-			local snip = ctx.item.snippet ---@type Scissors.SnippetObj
+			local snip = ctx.item.snippet ---@type Tweezers.SnippetObj
 			local bufnr = ctx.buf ---@type number
 
 			vim.bo[bufnr].modifiable = true
@@ -55,10 +55,10 @@ function M.selectSnippet(snippets, prompt)
 			vim.defer_fn(function() u.tokenHighlight(bufnr) end, 1)
 		end,
 
-		---@param item Scissors.SnacksObj,
+		---@param item Tweezers.SnacksObj,
 		confirm = function(picker, item)
 			picker:close()
-			require("scissors.3-edit-popup").editInPopup(item.snippet, "update")
+			require("tweezers.3-edit-popup").editInPopup(item.snippet, "update")
 		end,
 	}
 end
