@@ -7,7 +7,7 @@ end
 
 local M = {}
 
----@param userConfig? Scissors.Config
+---@param userConfig? Tweezers.Config
 function M.setup(userConfig) require("tweezers.config").setupPlugin(userConfig) end
 
 function M.addNewSnippet(exCmdArgs) require("tweezers.1-prepare-selection").addNewSnippet(exCmdArgs) end
