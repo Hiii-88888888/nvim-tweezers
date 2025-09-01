@@ -14,7 +14,7 @@
 ---@field fileIsNew? boolean
 
 ---DOCS https://code.visualstudio.com/api/language-extensions/snippet-guide
----@class Tweezers.packageLua
+---@class Tweezers.packageJson
 ---@field contributes { snippets: Tweezers.snippetFileMetadata[] }
 
 ---@class (exact) Tweezers.snippetFileMetadata
