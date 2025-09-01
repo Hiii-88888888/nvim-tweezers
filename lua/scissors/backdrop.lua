@@ -1,12 +1,12 @@
 local M = {}
 --------------------------------------------------------------------------------
 
-local backdropName = "ScissorsBackdrop"
+local backdropName = "TweezersBackdrop"
 
 ---@param referenceBuf number Reference buffer, when that buffer is closed, the backdrop will be closed too
 ---@param referenceZindex? number zindex of the reference window, where the backdrop should be placed below
 function M.new(referenceBuf, referenceZindex)
-	local config = require("scissors.config").config
+	local config = require("tweezers.config").config
 	if not config.backdrop.enabled then return end
 	local blend = config.backdrop.blend
 
@@ -52,12 +52,12 @@ end
 ---@param filetype string
 ---@return integer augroup
 function M.setup(filetype)
-	local group = vim.api.nvim_create_augroup("nvim-scissors.backdrop." .. filetype, {})
+	local group = vim.api.nvim_create_augroup("nvim-tweezers.backdrop." .. filetype, {})
 	vim.api.nvim_create_autocmd("FileType", {
 		group = group,
 		once = true,
 		pattern = filetype,
-		callback = function(ctx) require("scissors.backdrop").new(ctx.buf) end,
+		callback = function(ctx) require("tweezers.backdrop").new(ctx.buf) end,
 	})
 	return group
 end
