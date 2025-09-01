@@ -2,16 +2,16 @@
 --------------------------------------------------------------------------------
 local M = {}
 
-local rw = require("scissors.vscode-format.read-write")
-local u = require("scissors.utils")
-local config = require("scissors.config").config
+local rw = require("tweezers.vscode-format.read-write")
+local u = require("tweezers.utils")
+local config = require("tweezers.config").config
 --------------------------------------------------------------------------------
 
 ---@param filetype "all"|string
 ---@return string[] absPathsOfSnipfileForFt
 function M.getSnippetfilePathsForFt(filetype)
 	local packageJson = rw.readAndParseJson(config.snippetDir .. "/package.json")
-	---@cast packageJson Scissors.packageJson
+	---@cast packageJson Tweezers.packageJson
 
 	local snipFilesMetadata = packageJson.contributes.snippets
 	local absPaths = {}
@@ -29,17 +29,17 @@ end
 
 ---@param absPath string of snippet file
 ---@param filetype string filetype to assign to all snippets in the file
----@return Scissors.SnippetObj[]
+---@return Tweezers.SnippetObj[]
 ---@nodiscard
 function M.readVscodeSnippetFile(absPath, filetype)
-	local vscodeJson = rw.readAndParseJson(absPath) ---@cast vscodeJson Scissors.VSCodeSnippetDict
+	local vscodeJson = rw.readAndParseJson(absPath) ---@cast vscodeJson Tweezers.VSCodeSnippetDict
 
-	local snippetsInFileList = {} ---@type Scissors.SnippetObj[]
+	local snippetsInFileList = {} ---@type Tweezers.SnippetObj[]
 
 	-- convert dictionary to array for `vim.ui.select`
 	for key, snip in pairs(vscodeJson) do
 		---@diagnostic disable-next-line: cast-type-mismatch we are converting it here
-		---@cast snip Scissors.SnippetObj
+		---@cast snip Tweezers.SnippetObj
 		snip.fullPath = absPath
 		snip.originalKey = key
 		snip.filetype = filetype
@@ -71,7 +71,7 @@ function M.readVscodeSnippetFile(absPath, filetype)
 	return snippetsInFileList
 end
 
----@param snip Scissors.SnippetObj snippet to update/create
+---@param snip Tweezers.SnippetObj snippet to update/create
 ---@param changedSnippetLines string[]
 ---@param prefixCount number determining how many lines in the changes lines belong to the prefix
 function M.updateSnippetInVscodeSnippetFile(snip, changedSnippetLines, prefixCount)
