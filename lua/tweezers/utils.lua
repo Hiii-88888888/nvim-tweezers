@@ -14,10 +14,10 @@ function M.notify(msg, level, opts)
 	vim.notify(msg, vim.log.levels[level:upper()], opts)
 end
 
----@param snip Scissors.SnippetObj|Scissors.VSCodeSnippet
+---@param snip Tweezers.SnippetObj|Scissors.VSCodeSnippet
 ---@return string snipName
 function M.snipDisplayName(snip)
-	local snipName = snip.prefix
+	local snipName = snip.trig
 	if type(snipName) == "table" then snipName = table.concat(snipName, " · ") end
 	if #snipName > 50 then snipName = snipName:sub(1, 50) .. "…" end
 	return snipName
